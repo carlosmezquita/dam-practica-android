@@ -23,12 +23,16 @@ class LoginActivity : AppCompatActivity() {
         binding.loginButton.setOnClickListener { loginAuthentication() }
     }
 
-    private fun loginAuthentication(){
+    private fun loginAuthentication() {
         hideSoftKeyboard(this)
-        if(!(binding.passwordInput.text.toString() == "1234" && binding.userInput.text.toString() == "admin")) {
+        if (!(binding.passwordInput.text.toString() == "1234" && binding.userInput.text.toString() == "admin")) {
             val text = "Wrong username or password."
             val duration = Toast.LENGTH_SHORT
-            Snackbar.make(binding.root, "Los datos introducidos son incorrectos.", Snackbar.LENGTH_LONG)
+            Snackbar.make(
+                binding.root,
+                "Los datos introducidos son incorrectos.",
+                Snackbar.LENGTH_LONG
+            )
                 .setAction("Action", null)
                 .show()
             return
@@ -36,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this@LoginActivity, PlayerListActivity::class.java)
         startActivity(intent)
     }
+
     fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
             INPUT_METHOD_SERVICE
