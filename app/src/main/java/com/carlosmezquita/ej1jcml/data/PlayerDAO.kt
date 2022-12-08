@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface PlayerDao {
+interface PlayerDAO {
     @Query("SELECT * FROM player")
     fun getAll(): List<Player>
 

@@ -3,14 +3,13 @@ package com.carlosmezquita.ej1jcml.playerlist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.carlosmezquita.ej1jcml.R
 import com.carlosmezquita.ej1jcml.data.Player
 import com.carlosmezquita.ej1jcml.data.PlayerPositions
 
-class PlayerListAdapter: RecyclerView.Adapter<PlayerListAdapter.PlayerListViewHolder>() {
+class PlayerListAdapter : RecyclerView.Adapter<PlayerListAdapter.PlayerListViewHolder>() {
 
     var players = listOf<Player>()
         set(value) {
@@ -26,8 +25,8 @@ class PlayerListAdapter: RecyclerView.Adapter<PlayerListAdapter.PlayerListViewHo
     }
 
     override fun onBindViewHolder(holder: PlayerListViewHolder, position: Int) {
-        val article = players[position]
-        holder.bind(article)
+        val player = players[position]
+        holder.bind(player)
     }
 
     override fun getItemCount() = players.size
@@ -42,9 +41,9 @@ class PlayerListAdapter: RecyclerView.Adapter<PlayerListAdapter.PlayerListViewHo
 
         fun bind(player: Player) {
             name.text = player.name
-            price.text = player.price.toString() +"€"
+            price.text = player.price.toString() + "€"
 
-            val playerPos = when(player.position){
+            val playerPos = when (player.position) {
                 PlayerPositions.GOALKEEPER -> "PO"
                 PlayerPositions.DEFENDER -> "DF"
                 PlayerPositions.STRIKER -> "DL"

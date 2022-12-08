@@ -5,5 +5,6 @@ import androidx.room.RoomDatabase
 
 @Database(entities = [Player::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun userDao(): PlayerDao
+    abstract fun playerDao(): PlayerDAO
+
 }
