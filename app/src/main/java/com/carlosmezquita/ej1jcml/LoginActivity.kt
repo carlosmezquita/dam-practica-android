@@ -1,10 +1,11 @@
 package com.carlosmezquita.ej1jcml
 
-import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.carlosmezquita.ej1jcml.databinding.LoginActivityBinding
 import com.carlosmezquita.ej1jcml.playerlist.PlayerListActivity
@@ -18,16 +19,17 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = LoginActivityBinding.inflate(layoutInflater)
         val view = binding.root
-        title = "Inicia sesión";
+        title = "Inicia sesión"
         setContentView(view)
         binding.loginButton.setOnClickListener { loginAuthentication() }
+        binding.passwordInput.setOnKeyListener{ view, keyCode, _ -> handleKeyEvent(view, keyCode)}
     }
 
     private fun loginAuthentication() {
-        hideSoftKeyboard(this)
-        if (!(binding.passwordInput.text.toString() == "1234" && binding.userInput.text.toString() == "admin")) {
-            val text = "Wrong username or password."
-            val duration = Toast.LENGTH_SHORT
+        Utils().hideSoftKeyboard(this@LoginActivity)
+        if (!(binding.passwordInput.text.toString() == "liceo" && binding.userInput.text.toString() == "admin")) {
+            binding.passwordInput.setText("")
+            binding.userInput.setText("")
             Snackbar.make(
                 binding.root,
                 "Los datos introducidos son incorrectos.",
@@ -38,18 +40,21 @@ class LoginActivity : AppCompatActivity() {
             return
         }
         val intent = Intent(this@LoginActivity, PlayerListActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
+        super.finish()
     }
 
-    fun hideSoftKeyboard(activity: Activity) {
-        val inputMethodManager: InputMethodManager = activity.getSystemService(
-            INPUT_METHOD_SERVICE
-        ) as InputMethodManager
-        if (inputMethodManager.isAcceptingText()) {
-            inputMethodManager.hideSoftInputFromWindow(
-                activity.currentFocus!!.windowToken,
-                0
-            )
+    private fun handleKeyEvent(view: View, keyCode: Int): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // Hide the keyboard
+            val inputMethodManager =
+                getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            loginAuthentication()
+            return true
         }
+        return false
     }
+
 }

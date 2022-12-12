@@ -11,7 +11,7 @@ data class Player(
     @ColumnInfo(name = "price") val price: Double?,
     @ColumnInfo(name = "position") val position: PlayerPositions?,
     @ColumnInfo(name = "score") val score: Int?
-) {
+):java.io.Serializable {
     companion object {
         val data
             get() = listOf(
