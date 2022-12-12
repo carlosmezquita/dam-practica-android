@@ -15,6 +15,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+    <string name="edit">Aplicar Cambios</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -25,11 +26,11 @@
     <string name="score">Puntos</string>
 
     <!-- Player's positions-->
-    <string-array name="positions">
-        <item>Delantero</item>
+    <string-array name="positions_array">
         <item>Portero</item>
         <item>Defensa</item>
         <item>Mediocampista</item>
+        <item>Delantero</item>
     </string-array>
     <string name="title_activity_add_player">AddPlayerActivity</string>
 
@@ -69,4 +70,7 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="add">Añadir</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="80dp">
+    android:layout_height="80dp"
+    android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/player_name"
@@ -25,9 +26,9 @@
         android:id="@+id/player_price"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="128dp"
         android:layout_marginBottom="16dp"
         android:ellipsize="end"
-        android:layout_marginEnd="128dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/player_name"
@@ -55,12 +56,8 @@
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="@id/player_price"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/player_price"
+        app:dividerInsetEnd="16dp"
         app:dividerInsetStart="16dp"
-        app:dividerInsetEnd="16dp" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
