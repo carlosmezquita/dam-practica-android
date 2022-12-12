@@ -1,18 +1,14 @@
 package com.carlosmezquita.ej1jcml
 
-import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.room.Room
 import com.carlosmezquita.ej1jcml.data.AppDatabase
 import com.carlosmezquita.ej1jcml.data.Player
@@ -23,7 +19,7 @@ import com.carlosmezquita.ej1jcml.playerlist.PlayerListActivity
 
 class AddPlayerActivity : AppCompatActivity() {
     private lateinit var binding: EditPlayerActivityBinding
-    private lateinit var selectorOptions : Spinner
+    private lateinit var selectorOptions: Spinner
     private var playerPosition: PlayerPositions? = null
 
 
@@ -34,23 +30,32 @@ class AddPlayerActivity : AppCompatActivity() {
         title = "Añada un jugador"
         setContentView(view)
         binding.submitButton.setOnClickListener { showDialog() }
-        binding.cancelButton.setOnClickListener {this@AddPlayerActivity.onBackPressedDispatcher.onBackPressed() }
+        binding.cancelButton.setOnClickListener { this@AddPlayerActivity.onBackPressedDispatcher.onBackPressed() }
 
         selectorOptions = binding.positionSelector
 
         val positionValues =
-            ArrayAdapter.createFromResource(this, R.array.positions_array, android.R.layout.simple_spinner_item)
+            ArrayAdapter.createFromResource(
+                this,
+                R.array.positions_array,
+                android.R.layout.simple_spinner_item
+            )
 
         positionValues.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         selectorOptions.adapter = positionValues
 
 
-        selectorOptions.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        selectorOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>) {
                 Log.v("POSITION", "nothing selected")
             }
 
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 //                val pos = parent.getItemAtPosition(position)
                 playerPosition = when (position) {
                     0 -> PlayerPositions.GOALKEEPER
@@ -81,7 +86,7 @@ class AddPlayerActivity : AppCompatActivity() {
         ).allowMainThreadQueries().build()
         try {
             db.playerDao().insertAll(player)
-        }catch (e: SQLiteConstraintException){
+        } catch (e: SQLiteConstraintException) {
             binding.playerCode.error = "Ya existe un jugador con este código"
             return
         }
@@ -91,19 +96,21 @@ class AddPlayerActivity : AppCompatActivity() {
 
     private fun showDialog() {
         val valid: Boolean = Utils().checkParameters(binding)
-        if (!valid){return}
-        this@AddPlayerActivity?.let {
+        if (!valid) {
+            return
+        }
+        this@AddPlayerActivity.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
-                setPositiveButton("AÑADIR",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        submitPlayer()
-                        dialog.cancel()
-                    })
-                setNegativeButton("CANCELAR",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.cancel()
-                    })
+                setPositiveButton("AÑADIR"
+                ) { dialog, _ ->
+                    submitPlayer()
+                    dialog.cancel()
+                }
+                setNegativeButton("CANCELAR"
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
                 setTitle("Añadir jugador")
                 setMessage("¿Estás seguro de que deseas añadir al jugador?")
             }
@@ -114,4 +121,4 @@ class AddPlayerActivity : AppCompatActivity() {
     }
 
 
-    }
+}

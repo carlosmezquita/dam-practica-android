@@ -1,6 +1,5 @@
 package com.carlosmezquita.ej1jcml.playerlist
 
-import android.graphics.Movie
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,10 @@ import com.carlosmezquita.ej1jcml.data.Player
 import com.carlosmezquita.ej1jcml.data.PlayerPositions
 
 
-class PlayerListAdapter(private val players: MutableList<Player>,private val onClick: (Player) -> Unit) :
+class PlayerListAdapter(
+    private val players: MutableList<Player>,
+    private val onClick: (Player) -> Unit
+) :
     RecyclerView.Adapter<PlayerListAdapter.PlayerViewHolder>() {
 
 //    var players = listOf<Player>()
@@ -80,14 +82,5 @@ class PlayerListAdapter(private val players: MutableList<Player>,private val onC
             position.text = playerPos
             score.text = player.score.toString() + " puntos"
         }
-        }
     }
-    class PlayersComparator : DiffUtil.ItemCallback<Player>() {
-        override fun areItemsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Player, newItem: Player): Boolean {
-            return oldItem.id == newItem.id
-        }
-    }
+}

@@ -22,7 +22,7 @@ class LoginActivity : AppCompatActivity() {
         title = "Inicia sesión"
         setContentView(view)
         binding.loginButton.setOnClickListener { loginAuthentication() }
-        binding.passwordInput.setOnKeyListener{ view, keyCode, _ -> handleKeyEvent(view, keyCode)}
+        binding.passwordInput.setOnKeyListener { view, keyCode, _ -> handleKeyEvent(view, keyCode) }
     }
 
     private fun loginAuthentication() {

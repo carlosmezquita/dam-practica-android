@@ -7,7 +7,7 @@ import com.carlosmezquita.ej1jcml.databinding.EditPlayerActivityBinding
 
 class Utils {
     fun checkParameters(binding: EditPlayerActivityBinding): Boolean {
-        var valid: Boolean = true
+        var valid = true
 
         if (binding.playerCode.text.toString() == "") {
             binding.playerCode.error = "Introduce un número válido"
@@ -30,7 +30,8 @@ class Utils {
         }
         return valid
     }
-     fun hideSoftKeyboard(activity: Activity) {
+
+    fun hideSoftKeyboard(activity: Activity) {
         val inputMethodManager: InputMethodManager = activity.getSystemService(
             AppCompatActivity.INPUT_METHOD_SERVICE
         ) as InputMethodManager
@@ -40,5 +41,5 @@ class Utils {
                 0
             )
         }
-}
+    }
 }
