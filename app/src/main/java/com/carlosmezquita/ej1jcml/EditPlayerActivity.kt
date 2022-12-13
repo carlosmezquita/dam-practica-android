@@ -1,26 +1,21 @@
 package com.carlosmezquita.ej1jcml
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.room.Room
 import com.carlosmezquita.ej1jcml.data.AppDatabase
 import com.carlosmezquita.ej1jcml.data.Player
 import com.carlosmezquita.ej1jcml.data.PlayerPositions
 import com.carlosmezquita.ej1jcml.databinding.EditPlayerActivityBinding
-import com.carlosmezquita.ej1jcml.playerlist.PlayerListActivity
 
 
 class EditPlayerActivity : AppCompatActivity() {
     private lateinit var binding: EditPlayerActivityBinding
-    private lateinit var selectorOptions: Spinner
     private var playerPosition: PlayerPositions? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,56 +31,40 @@ class EditPlayerActivity : AppCompatActivity() {
             Room.databaseBuilder(
                 application,
                 AppDatabase::class.java, "players-database"
-            ).allowMainThreadQueries().build()
+            ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
         }
         val playerDao = db.playerDao()
 
         val player = playerDao.findById(playerId)
 
-        binding.deleteButton.isVisible = true
-
+        println(player)
+        binding.playerCode.isVisible
         binding.playerCode.setText(player.id.toString())
         binding.playerCode.isEnabled = false
         binding.playerName.setText(player.name)
         binding.playerPrice.setText(player.price.toString())
         binding.playerScore.setText(player.score.toString())
 
-        selectorOptions = binding.positionSelector
 
-        val positionValues =
-            ArrayAdapter.createFromResource(
-                this,
-                R.array.positions_array,
-                android.R.layout.simple_spinner_item
-            )
-
-        positionValues.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        selectorOptions.adapter = positionValues
-
-        val index = when (player.position) {
-            PlayerPositions.GOALKEEPER -> 0
-            PlayerPositions.DEFENDER -> 1
-            PlayerPositions.MIDFIELDER -> 2
-            // else = striker
+        val posString = when (player.position) {
+            PlayerPositions.GOALKEEPER -> "Portero (PO)"
+            PlayerPositions.DEFENDER -> "Defensa (D)"
+            PlayerPositions.MIDFIELDER -> "Mediocampista (MC)"
+            PlayerPositions.STRIKER -> "Delantero (DE)"
             else -> {
-                3
+                "Sin asignar"
             }
         }
+        binding.spinnerPosition.setText(posString)
 
-        selectorOptions.setSelection(index)
 
-        selectorOptions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                Log.v("POSITION", "nothing selected")
-            }
+        val positions = resources.getStringArray(R.array.positions_array)
+        val arrayAdapter = ArrayAdapter(this@EditPlayerActivity, R.layout.dropdown_item, positions)
+        binding.spinnerPosition.setAdapter(arrayAdapter)
 
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-
+        binding.spinnerPosition.onItemClickListener =
+            AdapterView.OnItemClickListener { _, _, position, _ ->
+                binding.spinnerLayout.error = ""
                 playerPosition = when (position) {
                     0 -> PlayerPositions.GOALKEEPER
                     1 -> PlayerPositions.DEFENDER
@@ -96,34 +75,49 @@ class EditPlayerActivity : AppCompatActivity() {
                     }
                 }
             }
+
+        binding.toolbar.navigationIcon =
+            ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_back_24, theme)
+        binding.toolbar.setNavigationOnClickListener {
+            this@EditPlayerActivity.onBackPressedDispatcher.onBackPressed()
+        }
+        binding.toolbar.inflateMenu(R.menu.toolbar)
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_delete -> {
+                    showDialogDelete(player)
+                    true
+                }
+                else -> {
+                    super.onOptionsItemSelected(it)
+                }
+            }
         }
 
+
         binding.submitButton.text = resources.getString(R.string.edit)
-        binding.deleteButton.setOnClickListener { showDialogDelete(player) }
         binding.submitButton.setOnClickListener { showDialogSubmit() }
-        binding.cancelButton.setOnClickListener { this@EditPlayerActivity.onBackPressedDispatcher.onBackPressed() }
 
 
     }
 
     private fun submitPlayer() {
         Utils().hideSoftKeyboard(this)
-        val playerCode = binding.playerCode.text.toString().toInt()
         val playerName = binding.playerName.text.toString()
         val playerPrice = binding.playerPrice.text.toString().toDoubleOrNull()
         val playerScore = binding.playerScore.text.toString().toIntOrNull()
 
-        val player = Player(playerCode, playerName, playerPrice, playerPosition, playerScore)
+        val player = Player(0, playerName, playerPrice, playerPosition, playerScore)
         val db = getDatabase()
         db.playerDao().updatePlayer(player)
-        PlayerListActivity().updateItem(player)
+//        PlayerListActivity().updateItem(player)
         super.finish()
     }
 
     private fun deletePlayer(player: Player) {
         val db = getDatabase()
         db.playerDao().delete(player)
-        PlayerListActivity().removeItem(player)
+//        PlayerListActivity().removeItem(player)
         super.finish()
     }
 
@@ -142,12 +136,14 @@ class EditPlayerActivity : AppCompatActivity() {
         this@EditPlayerActivity.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
-                setPositiveButton("APLICAR"
+                setPositiveButton(
+                    "APLICAR"
                 ) { dialog, _ ->
                     submitPlayer()
                     dialog.cancel()
                 }
-                setNegativeButton("CANCELAR"
+                setNegativeButton(
+                    "CANCELAR"
                 ) { dialog, _ ->
                     dialog.cancel()
                 }
@@ -168,15 +164,17 @@ class EditPlayerActivity : AppCompatActivity() {
         this@EditPlayerActivity.let {
             val builder = AlertDialog.Builder(it)
             builder.apply {
-                setPositiveButton("ELIMINAR",
-                    DialogInterface.OnClickListener { dialog, _ ->
-                        deletePlayer(player)
-                        dialog.cancel()
-                    })
-                setNegativeButton("CANCELAR",
-                    DialogInterface.OnClickListener { dialog, _ ->
-                        dialog.cancel()
-                    })
+                setPositiveButton(
+                    "ELIMINAR"
+                ) { dialog, _ ->
+                    deletePlayer(player)
+                    dialog.cancel()
+                }
+                setNegativeButton(
+                    "CANCELAR"
+                ) { dialog, _ ->
+                    dialog.cancel()
+                }
                 setTitle("Eliminar jugador")
                 setMessage("¿Estás seguro de que deseas eliminar el jugador?")
             }

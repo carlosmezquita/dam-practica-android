@@ -27,10 +27,10 @@
 
     <!-- Player's positions-->
     <string-array name="positions_array">
-        <item>Portero</item>
-        <item>Defensa</item>
-        <item>Mediocampista</item>
-        <item>Delantero</item>
+        <item>Portero (PO)</item>
+        <item>Defensa (DF)</item>
+        <item>Mediocampista (MC)</item>
+        <item>Delantero (DL)</item>
     </string-array>
     <string name="title_activity_add_player">AddPlayerActivity</string>
 

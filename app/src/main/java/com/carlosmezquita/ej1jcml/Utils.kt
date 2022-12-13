@@ -9,14 +9,14 @@ class Utils {
     fun checkParameters(binding: EditPlayerActivityBinding): Boolean {
         var valid = true
 
-        if (binding.playerCode.text.toString() == "") {
-            binding.playerCode.error = "Introduce un número válido"
-            valid = false
-        }
         if (binding.playerName.text.toString() == "") {
             binding.playerName.error = "Introduce un nombre válido"
             valid = false
 
+        }
+        if (binding.spinnerPosition.text.toString() == "") {
+            binding.spinnerLayout.error = "Seleccione una opción"
+            valid = false
         }
         if (binding.playerPrice.text.toString() == "") {
             binding.playerPrice.error = "Introduce un precio válido"
@@ -42,4 +42,6 @@ class Utils {
             )
         }
     }
+
+
 }

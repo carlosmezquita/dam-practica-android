@@ -14,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: LoginActivityBinding
+    private var attempts = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,9 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginAuthentication() {
         Utils().hideSoftKeyboard(this@LoginActivity)
+        if (attempts >= 2) {
+            super.finish()
+        }
         if (!(binding.passwordInput.text.toString() == "liceo" && binding.userInput.text.toString() == "admin")) {
             binding.passwordInput.setText("")
             binding.userInput.setText("")
@@ -37,6 +41,7 @@ class LoginActivity : AppCompatActivity() {
             )
                 .setAction("Action", null)
                 .show()
+            attempts++
             return
         }
         val intent = Intent(this@LoginActivity, PlayerListActivity::class.java)
