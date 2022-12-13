@@ -94,7 +94,7 @@ class EditPlayerActivity : AppCompatActivity() {
             }
         }
 
-
+        binding.submitButton.setCompoundDrawablesRelativeWithIntrinsicBounds(R.drawable.ic_baseline_save_24, 0, 0,0)
         binding.submitButton.text = resources.getString(R.string.edit)
         binding.submitButton.setOnClickListener { showDialogSubmit() }
 
